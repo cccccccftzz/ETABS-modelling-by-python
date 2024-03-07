@@ -32,9 +32,9 @@ Author: Chen Fangting
 Date: 07/Mar/2024
 """
 
-import os
-import sys
-import comtypes.client #Python COM package based on the ctypes ffi foreign function library
+import os #os module provides a way to interact with the operating system (e.g., file paths, environment variables).
+import sys #sys module provides access to some variables and functions related to the Python runtime environment.
+import comtypes.client #comtypes.client module allows interaction with COM (Component Object Model) objects in Windows.
 
 def connect_to_etabs():
     #create a API helper object 
@@ -45,17 +45,23 @@ def connect_to_etabs():
     try:
         #get the active ETABS object
         my_etabs_object = helper.GetObject('CSI.ETABS.API.ETABSObject')
-    except (OSError, comtypes.COMError):
+    except (OSError, comtypes.COMError): 
+        '''
+        If either of these exceptions occurs: 
+        1.OSError: This exception is raised when an operating system-related error occurs 
+        2. comtypes.COMError: This exception is raised when there is an error related to COM (Component Object Model) objects, 
+        which are used for inter-process communication in Windows.
+        '''
         print('No running instance of the programme found or failed or failed to attach.')
-        sys.exit(-1)
+        sys.exit(-1) #The argument -1 indicates an abnormal exit status.When this line is executed, the Python script terminates immediately.
     
-    #create a SapModel object
+    #create an associated SapModel object
     sap_model = my_etabs_object.SapModel
     return my_etabs_object, sap_model
     
 
 def print_model_name(sap_model_object):
-    model_name = sap_model_object.GetModelFilename()
+    model_name = sap_model_object.GetModelFilename() #GetModelFilename() method applies to a SapModel instance i.e. sap_model_object here
     print(model_name)
 
 
