@@ -2,7 +2,7 @@
 Create a grid system in SAP2000 model.
 
 Parameters:
-- sapmodel (object): SAP2000 model object.
+- ETABS (object): Etabs V21 model object.
 - storey_heights (list): List of storey heights. The first element represents the ground storey height.
 - x_coordinates (list): List of x-coordinates for grid lines.
 - y_coordinates (list): List of y-coordinates for grid lines.
@@ -21,24 +21,40 @@ Date: 08/Mar/2024
 
 """
 
+
 def create_grid_system(sapmodel, storey_heights, x_coordinates, y_coordinates):
     num_of_storeys = len(storey_heights)
     typical_storey_height = storey_heights[1]
     ground_storey_height = storey_heights[0]
     num_of_lines_x = len(x_coordinates)
     num_of_lines_y = len(y_coordinates)
-    spacing_x = x_coordinates[1]
-    spacing_y = y_coordinates[1]
+    spacing_x = x_coordinates[1] - x_coordinates[0]
+    spacing_y = y_coordinates[1] - y_coordinates[0]
 
     ret = sapmodel.InitializeNewModel(6)
+    '''
+    InitializeNewModel(ModelType)
+    ModelType: An integer specifying the type of structural model to create.
+    6: 3D Frame Model
+    '''
     if ret == 0:
         print("Function InitializeNewModel was successful")
     else:
         print("Error running function InitializeNewModel")
 
-    ret = sapmodel.File.NewGridOnly(num_of_storeys, typical_storey_height, ground_storey_height,
-                                    num_of_lines_x, num_of_lines_y, spacing_x, spacing_y)
-    if ret == 0:
+    ret = sapmodel.File.NewGridOnly(num_of_storeys, typical_storey_height, ground_storey_height, num_of_lines_x, num_of_lines_y, spacing_x, spacing_y)
+    '''
+    int NewGridOnly(
+	int NumberStorys, 
+	double TypicalStoryHeight, 
+	double BottomStoryHeight, 
+	int NumberLinesX, 
+	int NumberLinesY, 
+	double SpacingX, 
+	double SpacingY
+    ) 
+    '''
+    if ret == 0: #If ret is 0, it usually means that the method executed successfully without any errors.
         print("Function NewGridOnly was successful")
     else:
         print("Error running function NewGridOnly")
@@ -48,8 +64,17 @@ def create_grid_system(sapmodel, storey_heights, x_coordinates, y_coordinates):
     # The output nested list has dimensions: len(x_coordinates) x len(y_coordinates)
     return grid_points
 
+'''
+[[(0, 0), (0, 4.365), (0, 8.73), (0, 13.095)], 
+[(8.1, 0), (8.1, 4.365), (8.1, 8.73), (8.1, 13.095)], 
+[(16.2, 0), (16.2, 4.365), (16.2, 8.73), (16.2, 13.095)], 
+[(24.299999999999997, 0), (24.299999999999997, 4.365), (24.299999999999997, 8.73), (24.299999999999997, 13.095)], 
+[(32.4, 0), (32.4, 4.365), (32.4, 8.73), (32.4, 13.095)], [(40.5, 0), (40.5, 4.365), (40.5, 8.73), (40.5, 13.095)], 
+[(48.599999999999994, 0), (48.599999999999994, 4.365), (48.599999999999994, 8.73), (48.599999999999994, 13.095)], 
+[(56.699999999999996, 0), (56.699999999999996, 4.365), (56.699999999999996, 8.73), (56.699999999999996, 13.095)]]
+'''
 
 # Test Geometric parameters
 # storey_heights = [3.88, 3.88, 3.88]  #Only can set the two types of height
 # x_coordinates = [0] + [8.1 * i for i in range(1, 8)]
-# y_coordinates = [0] + [4.365, 4.365, 4.365]
+# y_coordinates = [0] + [4.365, 8.73, 13.095]
