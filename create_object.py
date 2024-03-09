@@ -41,7 +41,7 @@ def connect_to_etabs():
     helper = comtypes.client.CreateObject('ETABSv1.Helper')  #Create a COM object and return an interface pointer to it.
     helper = helper.QueryInterface(comtypes.gen.ETABSv1.cHelper)
 
-    #attach to a running instance of ETABS 
+    #attach to a ru nning instance of ETABS 
     try:
         #get the active ETABS object
         my_etabs_object = helper.GetObject('CSI.ETABS.API.ETABSObject')
@@ -71,10 +71,10 @@ def disconnect_from_etabs(etabs_object, sap_model, close = False):
     sap_model = None #Clear the variable
     etabs_object = None #Clear the variable
 
-#Test rows below:
-etabs_object, sap_model = connect_to_etabs()
-print_model_name(sap_model)
-disconnect_from_etabs(etabs_object, sap_model)
+# #Test rows below:
+# etabs_object, sap_model = connect_to_etabs()
+# print_model_name(sap_model)
+# disconnect_from_etabs(etabs_object, sap_model)
 
 
 
