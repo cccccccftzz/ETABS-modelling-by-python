@@ -1,4 +1,5 @@
 from create_object import *
+from set_units import *
 from create_grid_system import *
 from draw_slab import *
 from material_prop import *
@@ -10,6 +11,10 @@ import comtypes.client
 etabs_object, sap_model = connect_to_etabs()
 print_model_name(sap_model)
 disconnect_from_etabs(etabs_object, sap_model)
+
+add_eurocode_conc_materials(sap_model, delete_existing=False)
+
+set_etabs_units(sap_model)
 
 #Generate the grid line by given value
 storey_heights = [3.88, 3.88, 3.88]  #Only can set the two types of height
