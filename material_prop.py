@@ -1,6 +1,6 @@
 '''
 Get all the materials from the created sap_model object
-To define the most common used concrete C30/37 from EC2 code for Singapore Industry Design
+To define the most common used concrete C25/30, C30/37, C32/40, C40/50 from EC2 code for Singapore Industry Design
 '''
 import re
 
@@ -55,41 +55,11 @@ def get_all_materials(sap_model):
             materials[mat_name] = {"mat_name": mat_name, "mat_type": mat_type}
     return materials
 
-
-def add_concrete_material(sap_model): 
-    # Material properties
-    material_name = "C30/37"
-    material_type = 2
-    region = "Europe"
-    standard = "EN 1992-1-1 per 206-1"
-    grade = "C30/37"
-
-    # Add concrete material to the model
-    result = sap_model.PropMaterial.AddMaterial(material_name, material_type, region, standard, grade)
-
-    # Check the return code
-    ret = result[1] if isinstance(result, list) and len(result) > 1 else result
-
-    if ret == 0:
-        print(f"Concrete material '{material_name}' added successfully.")
-    else:
-        print(f"Error adding concrete material. Return code: {ret}")
-
-def set_concrete_material(sap_model, existing_prop, new_prop):
-    existing_prop = "C30/37"
-    Fc = 32
-    is_lightweight = False
-    stress_strain_curve_type = 2
-    SSHysType 
-
-import re
-
 def add_eurocode_conc_materials(sap_model, delete_existing=False):
     """
     This will set all the concrete grades with material properties to Eurocode,
-    C12/15, C16/20, C20/25, C25/30, C30/37, C35/45, C40/50, C45/55, C50/60,
-    C55/67, C60/75, C70/85, C80/95, C90/105. The materials will have the
-    designation 'EC-C12/15' etc.
+    C25/30, C30/37, C32/40, C40/50. The materials will have the
+    designation 'EC-C32/40' etc.
 
     Parameters
     SapModel : Pointer (refer to function connect_to_etabs)
@@ -98,11 +68,7 @@ def add_eurocode_conc_materials(sap_model, delete_existing=False):
 
     Returns None
     """
-    conc_grades = [
-        "C12/15", "C16/20", "C20/25", "C25/30", "C30/37", "C35/45",
-        "C40/50", "C45/55", "C50/60", "C55/67", "C60/75", "C70/85",
-        "C80/95", "C90/105"
-    ]
+    conc_grades = ["C25/30", "C30/37", "C32/40","C40/50"]
 
     gravity_weight = 25.0  # kN/m³
 
@@ -125,7 +91,7 @@ def add_eurocode_conc_materials(sap_model, delete_existing=False):
         conc_nm = "EC-" + grade
         numeric_part = re.search(r'\d+', grade).group()  # Extract numeric part using regex
         new_prop = sap_model.PropMaterial.AddMaterial(
-            conc_nm, 2, "User", "Eurocode", grade, UserName=conc_nm
+            conc_nm, 2, "Europe", "EN 1992-1-1 per 206-1", grade, UserName=conc_nm
         )
 
         # Check if the material was added successfully
@@ -139,6 +105,7 @@ def add_eurocode_conc_materials(sap_model, delete_existing=False):
         SSHysType = 4
         strainAtFc = 0.003
         strainAtUlt = 0.0035
+        
         return_code = sap_model.PropMaterial.SetOConcrete(
             conc_nm,
             float(numeric_part),  # Convert to float
@@ -149,13 +116,38 @@ def add_eurocode_conc_materials(sap_model, delete_existing=False):
             strainAtFc,
             strainAtUlt,
         )
-
-        # Check if setting concrete properties was successful
         if return_code != 0:
             print("Setting properties for material {} unsuccessful. Return code: {}".format(conc_nm, return_code))
             continue
 
+        conc_E = {
+            "C25/30": 31000,
+            "C30/37": 33000,
+            "C32/40": 33400,
+            "C40/50": 35000
+        }
+        concU = 0.2
+        concA = 10 * 10**-6
+        return_code = sap_model.PropMaterial.SetMPIsotropic(conc_nm, conc_E[grade], concU, concA)
+        if return_code != 0:
+            print("Setting properties for material {} unsuccessful. Return code: {}".format(conc_nm, return_code))
+            continue        
+        
+        sap_model.PropMaterial.SetWeightAndMass(conc_nm, 1, 25 * 10**-6)
+        if return_code != 0:
+            print("Setting properties for material {} unsuccessful. Return code: {}".format(conc_nm, return_code))
+            continue 
+
+        # Check if setting concrete properties was successful
         # Rest of the code...
         print("Material {} added successfully".format(conc_nm))
 
     return None
+
+'''
+def add_eurocode_rebar_materials(sap_model):
+    return_code = sap_model.PropMaterial.SetORebar('fy500'), 300, 500, 375, 625, 1, 1, 0.01, 0.09, False, 0)
+    print("Setting properties for material unsuccessful. Return code: {return_code}")
+    continue 
+'''
+
