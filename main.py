@@ -18,9 +18,7 @@ set_etabs_units(sap_model)
 #Adding the most common used concrete C25/30, C30/37, C32/40, C40/50 from EC2 code for Singapore Industry Design
 add_eurocode_conc_materials(sap_model, delete_existing=False)
 
-
-
-# #Generate the grid line by given value
+# Generate the grid line by given value
 # storey_heights = [3.88, 3.88, 3.88]  #Only can set the two types of height
 # x_coordinates = [0] + [8.1 * i for i in range(1, 8)]
 # y_coordinates = [0] + [4.365, 8.73, 13.095]
@@ -36,11 +34,8 @@ add_eurocode_conc_materials(sap_model, delete_existing=False)
 #     ['Base', 0.0, 0.0, False, None, False, 0.0]]
 # '''
 
-
 # #Define concrete material C30/37
 # add_concrete_material(sap_model)
-
-
 
 # # Set slab properties
 # slab_prop_name = "MyRC125mmSlab"
