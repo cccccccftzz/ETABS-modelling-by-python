@@ -1,10 +1,13 @@
 """
-The provided material properties module appears to be a Python script for interacting with a structural analysis software, possibly ETABS (Extended Three-dimensional Analysis of Building Systems). The module focuses on retrieving and modifying material properties, with a specific emphasis on concrete and steel materials. Here is an overall documentation for the module:
+The provided material properties module appears to be a Python script for interacting with a structural analysis software, possibly ETABS (Extended Three-dimensional Analysis of Building Systems). 
+The module focuses on retrieving and modifying material properties, with a specific emphasis on concrete and steel materials.
 
 Note:
 - Please adjust the parameters as needed for your specific project and standards.
 - Ensure that the material type, region, and standard align with your SAP model and requirements.
 
+Author: Chen Fangting
+Date: 13/Mar/2024
 """
 import re
 
