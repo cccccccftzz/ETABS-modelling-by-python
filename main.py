@@ -7,16 +7,18 @@ from set_slab_prop import *
 from get_storey_data import *
 import comtypes.client
 
-#Connect to Etabs model
+# Connect to Etabs model
 etabs_object, sap_model = connect_to_etabs()
 print_model_name(sap_model)
 disconnect_from_etabs(etabs_object, sap_model)
 
-#Set the present units kN for force and m for length 
+# Set the present units kN for force and m for length
 set_etabs_units(sap_model)
 
-#Adding the most common used concrete C25/30, C30/37, C32/40, C40/50 from EC2 code for Singapore Industry Design
-add_eurocode_conc_materials(sap_model, delete_existing=False)
+# Adding the most common used concrete C25/30, C30/37, C32/40, C40/50 from EC2 code for Singapore Industry Design
+add_eurocode_conc_materials(sap_model, delete_existing=True)
+
+add_eurocode_rebar_materials(sap_model, delete_existing=True)
 
 # Generate the grid line by given value
 # storey_heights = [3.88, 3.88, 3.88]  #Only can set the two types of height
@@ -28,9 +30,9 @@ add_eurocode_conc_materials(sap_model, delete_existing=False)
 
 # print(f'{get_story_data(sap_model) = }')
 # '''get_story_data(sap_model) = [
-#     ['Story3', 3.88, 11.64, True, None, False, 0.0], 
-#     ['Story2', 3.88, 7.76, False, 'Story3', False, 0.0], 
-#     ['Story1', 3.88, 3.88, False, 'Story3', False, 0.0], 
+#     ['Story3', 3.88, 11.64, True, None, False, 0.0],
+#     ['Story2', 3.88, 7.76, False, 'Story3', False, 0.0],
+#     ['Story1', 3.88, 3.88, False, 'Story3', False, 0.0],
 #     ['Base', 0.0, 0.0, False, None, False, 0.0]]
 # '''
 
@@ -52,7 +54,6 @@ add_eurocode_conc_materials(sap_model, delete_existing=False)
 # for z, story_height in enumerate(storey_heights):
 #     z_coordinate = sum(storey_heights[:z + 1]) #{1:3.88, 2:3.88, 3:3.88}
 #     draw_slab(sap_model, grid_points, 0, len(x_coordinates) - 1, 0, len(y_coordinates) - 1, slab_offset, z_coordinate, prop_name)
-
 
 
 # Close ETABS
