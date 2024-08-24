@@ -37,6 +37,9 @@ add_eurocode_rebar_materials(sap_model, delete_existing=True)
 #     ['Base', 0.0, 0.0, False, None, False, 0.0]]
 # '''
 
+# #Define concrete material C30/37
+# add_concrete_material(sap_model)
+
 # # Set slab properties
 # slab_prop_name = "MyRC125mmSlab"
 # ret = set_slab_prop(sap_model, slab_prop_name)

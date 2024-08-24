@@ -1,5 +1,6 @@
 import comtypes.client
 
+
 def set_slab_prop(sap_model, prop_name):
     """
     Set slab property in ETABS.
@@ -19,6 +20,7 @@ def set_slab_prop(sap_model, prop_name):
     Notes = ""  # Optional notes, leave empty for default
     GUID = ""  # Optional GUID, leave empty for default
 
-    ret = sap_model.PropArea.SetSlab(prop_name, SlabType, ShellType, MatProp, Thickness, Color, Notes, GUID)
+    ret = sap_model.PropArea.SetSlab(
+        prop_name, SlabType, ShellType, MatProp, Thickness, Color, Notes, GUID
+    )
     return ret
-

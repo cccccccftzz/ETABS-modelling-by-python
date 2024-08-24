@@ -32,50 +32,54 @@ Author: Chen Fangting
 Date: 07/Mar/2024
 """
 
-import os #os module provides a way to interact with the operating system (e.g., file paths, environment variables).
-import sys #sys module provides access to some variables and functions related to the Python runtime environment.
-import comtypes.client #comtypes.client module allows interaction with COM (Component Object Model) objects in Windows.
+import os  # os module provides a way to interact with the operating system (e.g., file paths, environment variables).
+import sys  # sys module provides access to some variables and functions related to the Python runtime environment.
+import comtypes.client  # comtypes.client module allows interaction with COM (Component Object Model) objects in Windows.
+
 
 def connect_to_etabs():
-    #create a API helper object 
-    helper = comtypes.client.CreateObject('ETABSv1.Helper')  #Create a COM object and return an interface pointer to it.
+    # create a API helper object
+    helper = comtypes.client.CreateObject(
+        "ETABSv1.Helper"
+    )  # Create a COM object and return an interface pointer to it.
     helper = helper.QueryInterface(comtypes.gen.ETABSv1.cHelper)
 
-    #attach to a ru nning instance of ETABS 
+    # attach to a ru nning instance of ETABS
     try:
-        #get the active ETABS object
-        my_etabs_object = helper.GetObject('CSI.ETABS.API.ETABSObject')
-    except (OSError, comtypes.COMError): 
-        '''
+        # get the active ETABS object
+        my_etabs_object = helper.GetObject("CSI.ETABS.API.ETABSObject")
+    except (OSError, comtypes.COMError):
+        """
         If either of these exceptions occurs: 
         1.OSError: This exception is raised when an operating system-related error occurs 
         2. comtypes.COMError: This exception is raised when there is an error related to COM (Component Object Model) objects, 
         which are used for inter-process communication in Windows.
-        '''
-        print('No running instance of the programme found or failed or failed to attach.')
-        sys.exit(-1) #The argument -1 indicates an abnormal exit status.When this line is executed, the Python script terminates immediately.
-    
-    #create an associated SapModel object
+        """
+        print(
+            "No running instance of the programme found or failed or failed to attach."
+        )
+        sys.exit(
+            -1
+        )  # The argument -1 indicates an abnormal exit status.When this line is executed, the Python script terminates immediately.
+
+    # create an associated SapModel object
     sap_model = my_etabs_object.SapModel
     return my_etabs_object, sap_model
-    
+
 
 def print_model_name(sap_model_object):
-    model_name = sap_model_object.GetModelFilename() #GetModelFilename() method applies to a SapModel instance i.e. sap_model_object here
+    model_name = sap_model_object.GetModelFilename()  # GetModelFilename() method applies to a SapModel instance i.e. sap_model_object here
     print(model_name)
 
 
-def disconnect_from_etabs(etabs_object, sap_model, close = False):
+def disconnect_from_etabs(etabs_object, sap_model, close=False):
     if close:
         etabs_object.ApplicationExit(False)
-    sap_model = None #Clear the variable
-    etabs_object = None #Clear the variable
+    sap_model = None  # Clear the variable
+    etabs_object = None  # Clear the variable
+
 
 # #Test rows below:
 # etabs_object, sap_model = connect_to_etabs()
 # print_model_name(sap_model)
 # disconnect_from_etabs(etabs_object, sap_model)
-
-
-
-

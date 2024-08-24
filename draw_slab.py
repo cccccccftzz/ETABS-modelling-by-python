@@ -2,13 +2,24 @@
 ETABS draw slab by coordinates
 """
 
-def draw_slab(sap_model, point_list, start_x_index, end_x_index, start_y_index, end_y_index, offset, z_coordinate, prop_name):
+
+def draw_slab(
+    sap_model,
+    point_list,
+    start_x_index,
+    end_x_index,
+    start_y_index,
+    end_y_index,
+    offset,
+    z_coordinate,
+    prop_name,
+):
     # Extract corner points of the slab
     x1, y1 = point_list[start_x_index][start_y_index]
     x2, y2 = point_list[end_x_index][start_y_index]
     x3, y3 = point_list[end_x_index][end_y_index]
     x4, y4 = point_list[start_x_index][end_y_index]
-    
+
     # Apply the offset
     x1 -= offset
     y1 -= offset
@@ -29,16 +40,20 @@ def draw_slab(sap_model, point_list, start_x_index, end_x_index, start_y_index, 
 
     # Add the slab to the ETABS model
     num_points = len(x_coordinates)
-    _, _, _, slab_name, ret = sap_model.AreaObj.AddByCoord(num_points, x_coordinates, y_coordinates, z_coordinates, slab_name, prop_name)
+    _, _, _, slab_name, ret = sap_model.AreaObj.AddByCoord(
+        num_points, x_coordinates, y_coordinates, z_coordinates, slab_name, prop_name
+    )
     if ret == 0:
-        print(f"Function AddByCoord was successful for slab {slab_name} with property {prop_name}")
+        print(
+            f"Function AddByCoord was successful for slab {slab_name} with property {prop_name}"
+        )
     else:
         print(f"Error running function AddByCoord for slab {slab_name}")
 
     return slab_name
 
 
-'''
+"""
     int AddByCoord(
 	int NumberPoints,
 	ref double[] X,
@@ -49,5 +64,4 @@ def draw_slab(sap_model, point_list, start_x_index, end_x_index, start_y_index, 
 	string UserName = "",
 	string CSys = "Global"
 )
-    '''
-    
+    """
